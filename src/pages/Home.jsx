@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import MovieCard from "../components/MovieCard";
+import "../css/Home.css";
+import { searchMovies, getPopularMovies } from "../services/api";
 
 function Home() {
   const movies = [
@@ -7,7 +10,7 @@ function Home() {
       title: "The Godfather",
       release_date: "March 24, 1972",
       poster:
-        "https://cdn.britannica.com/55/188355-050-D5E49258/Salvatore-Corsitto-The-Godfather-Marlon-Brando-Francis.jpg",
+        "https://www.goldenglobes.com/sites/default/files/styles/portrait_medium/public/films/the-godfather.jpg?itok=4v9Q5v8w",
     },
     {
       id: 2,
@@ -25,14 +28,34 @@ function Home() {
     },
   ];
 
-  return;
-  <div className="home">
-    <div className="movie-list">
-      {movies.map((movie) => (
-        <MovieCard movie={movie} key={movie.id} />
-      ))}
+  const handleSearch = (e) => {
+    e.preventDefault();
+    alert(searchQuery);
+    console.log("Search button clicked");
+  };
+
+  const [searchQuery, setSearchQuery] = useState("");
+
+  return (
+    <div className="home">
+      <form onSubmit={handleSearch} className="search-form">
+        <input
+          type="text"
+          placeholder="Search movies..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        <button type="submit" className="search-button">
+          Search
+        </button>
+      </form>
+      <div className="movies-grid">
+        {movies.map((movie) => (
+          <MovieCard movie={movie} key={movie.id} />
+        ))}
+      </div>
     </div>
-  </div>;
+  );
 }
 
 export default Home;
