@@ -24,16 +24,34 @@ function Home() {
     loadPopularMovies();
   }, []);
 
-  const handleSearch = (e) => {
+  const handleSearch = async (e) => {
     e.preventDefault();
-    alert(searchQuery);
-    console.log("Search button clicked");
+    if (!searchQuery.trim()) {
+      return;
+    }
+    if (loading) {
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const searchResults = await searchMovies(searchQuery);
+      setMovies(searchResults);
+      setError(null);
+    } catch (error) {
+      console.error("Error searching movies", error);
+      setError("Error searching movies");
+    } finally {
+      setLoading(false);
+    }
+    // setSearchQuery("");
   };
 
   return (
     <div className="home">
       <form onSubmit={handleSearch} className="search-form">
         <input
+          className="search-input"
           type="text"
           placeholder="Search movies..."
           value={searchQuery}
